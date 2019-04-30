@@ -1,0 +1,18 @@
+# Read the list of devices.
+while read LINE
+do
+
+	# Get the device id.
+    eval x=($LINE)
+	
+	# Install APK in multiple devices simultaneously.
+    adb -s ${x[0]} install -r $@ > /dev/null 2>&1 &
+	
+done <<< "`adb devices |  cut -sf 1`"
+
+# Wait until the installation is completely over.
+echo "Waiting..."
+wait
+
+# Output the end of installation.
+echo "INSTALLATION COMPLETED"
